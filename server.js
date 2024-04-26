@@ -12,10 +12,12 @@ app.use(express.json());
 
 // Routes
 
-
 // Server
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+mongoose.connection.once("open", () => {
+  console.log("Connection established to MongoDB");
+  server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 });
