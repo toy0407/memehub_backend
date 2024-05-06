@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const commentDbSchema = new Schema(
+const reactionDbSchema = new Schema(
   {
     _id: {
       type: mongoose.Schema.Types.ObjectId,
@@ -11,8 +11,9 @@ const commentDbSchema = new Schema(
       ref: "MemeDbModel",
       required: true,
     },
-    body: {
+    reactionType: {
       type: String,
+      enum: ["upvote", "downvote"],
       required: true,
     },
     author: {
@@ -32,6 +33,6 @@ const commentDbSchema = new Schema(
   }
 );
 
-const CommentDbModel = mongoose.model("CommentDbModel", commentDbSchema);
+const ReactionDbModel = mongoose.model("ReactionDbModel", reactionDbSchema);
 
-export { CommentDbModel };
+export { ReactionDbModel };

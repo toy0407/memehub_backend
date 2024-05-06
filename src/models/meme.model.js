@@ -15,8 +15,11 @@ const memeDbSchema = new Schema(
       type: String,
       required: true,
     },
+    audioUrl: {
+      type: String,
+    },
     caption: {
-        type: String,
+      type: String,
     },
     nsfw: {
       type: Boolean,
@@ -24,17 +27,14 @@ const memeDbSchema = new Schema(
     spoiler: {
       type: Boolean,
     },
-    upvotes: {
-      type: Number,
-      default: 0,
+    commentGroup: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CommentGroupDbModel",
     },
-    downvotes: {
-      type: Number,
-      default: 0,
+    reactionGroup: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ReactionGroupDbModel",
     },
-    commentList: {
-        
-    }
   },
   {
     timestamps: true,

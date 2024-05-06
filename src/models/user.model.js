@@ -15,6 +15,10 @@ const userDbSchema = new Schema(
       type: String,
       required: true,
     },
+    age: {
+      type: Number,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -29,18 +33,18 @@ const userDbSchema = new Schema(
     profileImageUrl: {
       type: String,
     },
-    memesList: [{
+    memesList: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "MemeDbModel",
-    }],
-    upvotedMemesList: [{
+      },
+    ],
+    favoriteMemesList: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "MemeDbModel",
-    }],
-    downvotedMemesList: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "MemeDbModel",
-    }],
+      },
+    ],
   },
   {
     timestamps: true,
