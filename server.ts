@@ -4,24 +4,34 @@ dotenv.config();
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import http from "http";
+import Logger from "./src/utils/logger.utils";
+import connectDB from "./src/config/db-connection.config";
+import ApiRateLimiter from "./src/utils/api-rate-limiter.utils";
 
 const app = express();
 const server = http.createServer(app);
 
 // Middlewares
+app.use(ApiRateLimiter);
 app.use(express.json());
 
 // Routes
 app.get("/", (req: Request, res: Response) => {
+  Logger.info("Home Executed");
   res.send("Hello World!");
 });
 
 // Server
-const PORT: number = parseInt(process.env.PORT || "5000", 10);
+const PORT: number = parseInt(process.env.PORT || "5001", 10);
 
+connectDB();
 mongoose.connection.once("open", () => {
-  console.log("Connection established to MongoDB");
+  Logger.info("Connection established to MongoDB");
   server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    Logger.info(`Server is running on port ${PORT}`);
   });
+});
+
+mongoose.connection.on("error", () => {
+  Logger.error(`Connection failed to MongoDB`);
 });

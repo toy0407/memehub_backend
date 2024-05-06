@@ -1,4 +1,8 @@
-# package directories
-node_modules
+# Ignore Node modules
+node_modules/
 
+# Ignore log files
+logs/
+
+# Ignore environment configuration file
 .env
