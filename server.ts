@@ -1,8 +1,9 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
-const express = require("express");
-const mongoose = require("mongoose");
-const http = require("http");
+import express, { Request, Response } from "express";
+import mongoose from "mongoose";
+import http from "http";
 
 const app = express();
 const server = http.createServer(app);
@@ -11,9 +12,12 @@ const server = http.createServer(app);
 app.use(express.json());
 
 // Routes
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World!");
+});
 
 // Server
-const PORT = process.env.PORT || 5000;
+const PORT: number = parseInt(process.env.PORT || "5000", 10);
 
 mongoose.connection.once("open", () => {
   console.log("Connection established to MongoDB");
