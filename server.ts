@@ -7,6 +7,7 @@ import http from "http";
 import Logger from "./src/utils/logger.utils";
 import connectDB from "./src/config/db-connection.config";
 import ApiRateLimiter from "./src/utils/api-rate-limiter.utils";
+import Auth0Connect from "./src/config/auth.config";
 
 const app = express();
 const server = http.createServer(app);
@@ -14,6 +15,7 @@ const server = http.createServer(app);
 // Middlewares
 app.use(ApiRateLimiter);
 app.use(express.json());
+app.use(Auth0Connect);
 
 // Routes
 app.get("/", (req: Request, res: Response) => {
