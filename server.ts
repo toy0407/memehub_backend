@@ -7,6 +7,7 @@ import http from "http";
 import Logger from "./src/utils/logger.utils";
 import connectDB from "./src/config/db-connection.config";
 import ApiRateLimiter from "./src/utils/api-rate-limiter.utils";
+import UserRouter from "./src/routes/user.routes";
 
 const app = express();
 const server = http.createServer(app);
@@ -16,10 +17,14 @@ app.use(ApiRateLimiter);
 app.use(express.json());
 
 // Routes
-app.get("/", (req: Request, res: Response) => {
-  Logger.info("Home Executed");
-  res.send("Hello World!");
-});
+app.use(`/user`, UserRouter)
+// app.get("/", (req: Request, res: Response) => {
+//   Logger.info("Home Executed");
+//   res.send("Hello World!");
+// });
+
+
+
 
 // Server
 const PORT: number = parseInt(process.env.PORT || "5001", 10);

@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { UserApi } from "../apis/user.api";
 
-const router = Router();
+const UserRouter = Router();
 
-router.post("/signup", UserApi.registerUser);
-router.post("/login", UserApi.loginUser);
-router.post("/refresh-token", UserApi.refreshAccessToken);
+UserRouter.post("/register", UserApi.registerUser)
+  .post("/login", UserApi.loginUser)
+  .post("/refresh-token", UserApi.refreshAccessToken);
 
-export default router;
+export default UserRouter;
