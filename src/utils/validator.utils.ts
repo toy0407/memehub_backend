@@ -5,3 +5,5 @@ class Validator {
     return schema.validate(input, { abortEarly: false });
   }
 }
+
+export default Validator;

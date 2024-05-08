@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface Meme extends Document {
+interface MemeDbModel extends Document {
   creator: mongoose.Types.ObjectId;
   url: string;
   audioUrl?: string;
@@ -11,7 +11,7 @@ interface Meme extends Document {
   reactionGroup?: mongoose.Types.ObjectId;
 }
 
-const memeDbSchema: Schema<Meme> = new Schema<Meme>(
+const memeDbSchema: Schema<MemeDbModel> = new Schema<MemeDbModel>(
   {
     _id: {
       type: Schema.Types.ObjectId,
@@ -53,6 +53,6 @@ const memeDbSchema: Schema<Meme> = new Schema<Meme>(
   }
 );
 
-const MemeDbModel = mongoose.model<Meme>("MemeDbModel", memeDbSchema);
+const Meme = mongoose.model<MemeDbModel>("Meme", memeDbSchema);
 
-export { MemeDbModel };
+export { Meme };

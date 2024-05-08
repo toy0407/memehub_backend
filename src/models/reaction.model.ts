@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface Reaction extends Document {
+interface ReactionDbModel extends Document {
   memeId: mongoose.Types.ObjectId;
   reactionType: ReactionTypes;
   author: mongoose.Types.ObjectId;
@@ -13,7 +13,7 @@ declare enum ReactionTypes {
   DOWNVOTE = "downvote",
 }
 
-const reactionDbSchema: Schema<Reaction> = new Schema<Reaction>(
+const reactionDbSchema: Schema<ReactionDbModel> = new Schema<ReactionDbModel>(
   {
     _id: {
       type: Schema.Types.ObjectId,
@@ -47,9 +47,6 @@ const reactionDbSchema: Schema<Reaction> = new Schema<Reaction>(
   }
 );
 
-const ReactionDbModel = mongoose.model<Reaction>(
-  "ReactionDbModel",
-  reactionDbSchema
-);
+const Reaction = mongoose.model<ReactionDbModel>("Reaction", reactionDbSchema);
 
-export { ReactionDbModel };
+export { Reaction };

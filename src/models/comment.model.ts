@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface Comment extends Document {
+interface CommentDbModel extends Document {
   memeId: mongoose.Types.ObjectId;
   body: string;
   author: mongoose.Types.ObjectId;
@@ -8,7 +8,7 @@ interface Comment extends Document {
   updatedAt?: Date;
 }
 
-const commentDbSchema: Schema<Comment> = new Schema<Comment>(
+const commentDbSchema: Schema<CommentDbModel> = new Schema<CommentDbModel>(
   {
     _id: {
       type: Schema.Types.ObjectId,
@@ -41,9 +41,6 @@ const commentDbSchema: Schema<Comment> = new Schema<Comment>(
   }
 );
 
-const CommentDbModel = mongoose.model<Comment>(
-  "CommentDbModel",
-  commentDbSchema
-);
+const Comment = mongoose.model<CommentDbModel>("Comment", commentDbSchema);
 
-export { CommentDbModel };
+export { Comment };

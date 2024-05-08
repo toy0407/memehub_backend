@@ -10,3 +10,13 @@ const userSchema = Joi.object({
   profileImageUrl: Joi.string().optional().allow(null),
   // TODO: Add memeList, favoriteMemeList
 });
+
+const userLoginValidationSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
+
+export const UserValidations = {
+  userSchema,
+  userLoginValidationSchema,
+};
