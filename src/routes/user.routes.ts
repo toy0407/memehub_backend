@@ -5,6 +5,9 @@ const UserRouter = Router();
 
 UserRouter.post("/register", UserApi.registerUser)
   .post("/login", UserApi.loginUser)
-  .post("/refresh-token", UserApi.refreshAccessToken);
+  .post("/refresh-token", UserApi.refreshAccessToken)
+  .post("/forgot-password", UserApi.forgotPassword)
+  .get("/find/username/:userName", UserApi.findUserByUsername)
+  .patch("/update/:userId", UserApi.updateUser);
 
 export default UserRouter;

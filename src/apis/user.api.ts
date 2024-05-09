@@ -5,10 +5,15 @@ import Logger from "../utils/logger.utils";
 import { UserService } from "../services/user.service";
 import { CommonUtils } from "../utils/commons.utils";
 import {
+  FindUserByUsernameRequestModel,
+  ForgotPasswordRequestModel,
   RefreshTokenRequestModel,
+  UpdateUserRequestModel,
   UserLoginRequestModel,
   UserRegisterRequestModel,
 } from "../models/request/user.request";
+import { UserIdRequestModel } from "../models/request/id.request";
+import { IdValidations } from "../validations/id.schema";
 
 const loginUser = async (req: Request, res: Response) => {
   try {
@@ -96,10 +101,113 @@ const refreshAccessToken = async (req: Request, res: Response) => {
         .status(404)
         .json({ message: refreshTokenResult.error.toString() });
     }
-    Logger.debug(`Refresh Token Success: ${refreshTokenResult}`)
+    Logger.debug(`Refresh Token Success: ${refreshTokenResult}`);
     return res.status(200).json({
       message: "Refresh Access Token Successful",
       data: refreshTokenResult.data,
+    });
+  } catch (err: any) {
+    Logger.error(`Internal Server Error: ${err}`);
+    return res.status(500).json({ message: err.toString() });
+  }
+};
+
+const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const reqBody = await Validator.validate<ForgotPasswordRequestModel>(
+      req.body,
+      UserValidations.forgotPasswordSchema
+    );
+    if (CommonUtils.isDefined(reqBody.error)) {
+      Logger.debug(`Forgot Password Request Error: ${reqBody.error}`);
+      return res.status(404).json({ message: reqBody.error!.toString() });
+    }
+    const forgotPasswordResult = await UserService.forgotPassword(
+      reqBody.value!.email
+    );
+    if (!forgotPasswordResult.isSuccess) {
+      Logger.debug(
+        `Forgot Password Request Error: ${forgotPasswordResult.error}`
+      );
+      return res
+        .status(404)
+        .json({ message: forgotPasswordResult.error.toString() });
+    }
+    Logger.debug(`Forgot Password Request Success: ${forgotPasswordResult}`);
+    return res.status(200).json({
+      message: "Forgot Password Request Successful",
+      data: forgotPasswordResult.data,
+    });
+  } catch (err: any) {
+    Logger.error(`Internal Server Error: ${err}`);
+    return res.status(500).json({ message: err.toString() });
+  }
+};
+
+const findUserByUsername = async (req: Request, res: Response) => {
+  try {
+    const reqBody = await Validator.validate<FindUserByUsernameRequestModel>(
+      req.params,
+      UserValidations.findUserByUsernameSchema
+    );
+    if (CommonUtils.isDefined(reqBody.error)) {
+      Logger.debug(`Find user by userName error: ${reqBody.error}`);
+      return res.status(404).json({ message: reqBody.error!.toString() });
+    }
+    const findUserByUsernameResult = await UserService.findUserByUserName(
+      reqBody.value!.userName
+    );
+    if (!findUserByUsernameResult.isSuccess) {
+      Logger.debug(
+        `Find user by userName error: ${findUserByUsernameResult.error}`
+      );
+      return res
+        .status(404)
+        .json({ message: findUserByUsernameResult.error.toString() });
+    }
+    Logger.debug(`Find user by userName success: ${findUserByUsernameResult}`);
+    return res.status(200).json({
+      message: "Find user by userName successful",
+      data: findUserByUsernameResult.data,
+    });
+  } catch (err: any) {
+    Logger.error(`Internal Server Error: ${err}`);
+    return res.status(500).json({ message: err.toString() });
+  }
+};
+
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const reqParams = await Validator.validate<UserIdRequestModel>(
+      req.params,
+      IdValidations.userIdSchema
+    );
+    if (CommonUtils.isDefined(reqParams.error)) {
+      Logger.debug(`Update user error: ${reqParams.error}`);
+      return res.status(404).json({ message: reqParams.error!.toString() });
+    }
+    const reqBody = await Validator.validate<UpdateUserRequestModel>(
+      req.body,
+      UserValidations.updateUserSchema
+    );
+    if (CommonUtils.isDefined(reqBody.error)) {
+      Logger.debug(`Update user error: ${reqBody.error}`);
+      return res.status(404).json({ message: reqBody.error!.toString() });
+    }
+    const updateUserResult = await UserService.updateUser(
+      reqParams.value!.userId,
+      reqBody.value!.update
+    );
+    if (!updateUserResult.isSuccess) {
+      Logger.debug(`Update user error: ${updateUserResult.error}`);
+      return res
+        .status(404)
+        .json({ message: updateUserResult.error.toString() });
+    }
+    Logger.debug(`Update user success: ${updateUserResult}`);
+    return res.status(200).json({
+      message: "Update user successful",
+      data: updateUserResult.data,
     });
   } catch (err: any) {
     Logger.error(`Internal Server Error: ${err}`);
@@ -111,4 +219,7 @@ export const UserApi = {
   loginUser,
   registerUser,
   refreshAccessToken,
+  forgotPassword,
+  findUserByUsername,
+  updateUser,
 };

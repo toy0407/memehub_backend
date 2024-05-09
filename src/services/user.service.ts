@@ -77,6 +77,36 @@ const refreshAccessToken = async (
   return { isSuccess: true, data: { accessToken: newAccessToken } };
 };
 
+const forgotPassword = async (
+  email: string
+): Promise<GenericResponseModel<any>> => {
+  // TODO: Implement Forgot Password
+  return { isSuccess: true };
+};
+
+const findUserByUserName = async (
+  userName: string
+): Promise<GenericResponseModel<any>> => {
+  const user = await User.findOne<UserDbModel>(
+    { userName: userName },
+    { userName: 1, email: 1, fullName: 1, memesList: 1, profileImageUrl: 1 }
+  );
+  return {
+    isSuccess: true,
+    data: { isPresent: CommonUtils.isDefined(user), user: user },
+  };
+};
+
+const updateUser = async (
+  userId: string,
+  update: Partial<UserDbModel>
+): Promise<GenericResponseModel<any>> => {
+  const updateResult = await User.updateOne({ _id: userId }, update, {
+    upsert: true,
+  });
+  return { isSuccess: true, data: { acknowledged: updateResult.acknowledged } };
+};
+
 const _generateAccessToken = (user: UserDbModel): string => {
   return jwt.sign({ userId: user.id }, process.env.JWT_ACCESS_TOKEN_SECRET!, {
     expiresIn: "15m",
@@ -93,4 +123,7 @@ export const UserService = {
   loginUser,
   registerUser,
   refreshAccessToken,
+  forgotPassword,
+  findUserByUserName,
+  updateUser,
 };
