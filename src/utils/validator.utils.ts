@@ -1,9 +1,27 @@
-import { Schema, ValidationResult } from "joi";
+import Joi from "joi";
 
-class Validator {
-  static validate<T>(input: T, schema: Schema): ValidationResult<T> {
-    return schema.validate(input, { abortEarly: false });
-  }
+interface ValidationResult<T> {
+  value?: T;
+  error?: Joi.ValidationError;
 }
 
-export default Validator;
+const validate = <T>(
+  input: any,
+  schema: Joi.ObjectSchema
+): Promise<ValidationResult<T>> => {
+  return new Promise((resolve, reject) => {
+    const result = schema.validate(input, {
+      stripUnknown: true,
+    });
+    if (result.error) {
+      const error: Joi.ValidationError = result.error;
+      resolve({ error });
+    } else {
+      resolve({ value: result.value });
+    }
+  });
+};
+
+export const Validator = {
+  validate,
+};

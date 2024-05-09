@@ -12,18 +12,16 @@ const commentGroupDbSchema: Schema<CommentGroupDbModel> =
     {
       _id: {
         type: Schema.Types.ObjectId,
-        required: true,
+        auto: true,
       },
       memeId: {
         type: Schema.Types.ObjectId,
         ref: "MemeDbModel",
-        required: true,
       },
       comments: [
         {
           type: Schema.Types.ObjectId,
           ref: "CommentDbModel",
-          required: true,
         },
       ],
       createdAt: {

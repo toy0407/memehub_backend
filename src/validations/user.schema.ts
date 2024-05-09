@@ -12,12 +12,24 @@ const userSchema = Joi.object({
   // TODO: Add memeList, favoriteMemeList
 });
 
-const userCredentialsValidationSchema = Joi.object({
+const userRegisterValidationSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+  userName: Joi.string().required(),
+});
+
+const userLoginValidationSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
 
+const refreshTokenSchema = Joi.object({
+  refreshToken: Joi.string().required(),
+});
+
 export const UserValidations = {
   userSchema,
-  userCredentialsValidationSchema,
+  userLoginValidationSchema,
+  userRegisterValidationSchema,
+  refreshTokenSchema,
 };

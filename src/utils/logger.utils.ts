@@ -1,20 +1,18 @@
 import winston from "winston";
 
-// Define log levels
 const logLevels = {
   error: 0,
   warn: 1,
   info: 2,
+  debug: 3,
 };
-
-// Define log colors
 const logColors = {
   error: "red",
   warn: "yellow",
   info: "green",
+  debug: "blue",
 };
 
-// Create logger instance
 const Logger = winston.createLogger({
   levels: logLevels,
   format: winston.format.combine(
@@ -28,18 +26,19 @@ const Logger = winston.createLogger({
       filename: "./logs/error.log",
       level: "error",
     }),
-    new winston.transports.File({ filename: "./logs/combined.log" }),
+    new winston.transports.File({ filename: "./logs/combined.log", level: "info" }),
   ],
 });
+
 if (process.env.NODE_ENV !== "production") {
   Logger.add(
     new winston.transports.Console({
       format: winston.format.simple(),
+      level: "debug",
     })
   );
 }
 
-// Extend logger with custom log levels and colors
 winston.addColors(logColors);
 
 export default Logger;

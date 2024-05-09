@@ -12,21 +12,19 @@ const loginUser = async (
   // Check if the user is present in database
   const user = await User.findOne<UserDbModel>({ email: email });
   if (CommonUtils.isNullorUndefined(user)) {
-    Logger.info("User not found");
+    Logger.debug("User not found");
     return { isSuccess: false, error: "User not found" };
   }
-
   // Check if the password is correct
   const isPasswordValid = bcrypt.compare(password, user?.password!);
   if (!isPasswordValid) {
-    Logger.info("Incorrect password");
+    Logger.debug("Incorrect password");
     return { isSuccess: false, error: "Incorrect password" };
   }
-
   // Login Successful
   const accessToken = _generateAccessToken(user!);
   const refreshToken = _generateRefreshToken(user!);
-  Logger.info(`Access token: ${accessToken}, Refresh token: ${refreshToken}`);
+  Logger.debug(`Access token: ${accessToken}, Refresh token: ${refreshToken}`);
   return {
     isSuccess: true,
     data: { accessToken: accessToken, refreshToken: refreshToken },
@@ -35,7 +33,8 @@ const loginUser = async (
 
 const registerUser = async (
   email: string,
-  password: string
+  password: string,
+  userName: string
 ): Promise<GenericResponseModel<any>> => {
   // Check for existing user
   const existingUser = await User.findOne<UserDbModel>({ email });
@@ -43,23 +42,39 @@ const registerUser = async (
     Logger.info("User already exists");
     return { isSuccess: false, error: "User already exists. Please sign in." };
   }
-
   // Hash user password
   const hashedPassword: string = await bcrypt.hash(password, 10);
-
   // Create new user with credentials
   const newUser: Partial<UserDbModel> = {
     email: email,
     password: hashedPassword,
+    userName: userName,
   };
   // Insert user in database
   const createNewUserResult: UserDbModel = await User.create(newUser);
   if (CommonUtils.isDefined(createNewUserResult)) {
-    Logger.info("New user created");
+    Logger.debug("New user created");
     return { isSuccess: true };
   }
-  Logger.info("Failed to create new user");
+  Logger.debug("Failed to create new user");
   return { isSuccess: false, error: "Failed to create new user" };
+};
+
+const refreshAccessToken = async (
+  refreshToken: string
+): Promise<GenericResponseModel<any>> => {
+  const decoded = jwt.verify(
+    refreshToken,
+    process.env.JWT_REFRESH_TOKEN_SECRET!
+  ) as { userId: string };
+  const userId = decoded.userId;
+  const user = await User.findById<UserDbModel>(userId);
+  if (CommonUtils.isNullorUndefined(user)) {
+    Logger.debug("User not found from provided token");
+    return { isSuccess: false, error: "User not found fron provided token" };
+  }
+  const newAccessToken = _generateAccessToken(user!);
+  return { isSuccess: true, data: { accessToken: newAccessToken } };
 };
 
 const _generateAccessToken = (user: UserDbModel): string => {
@@ -77,4 +92,5 @@ const _generateRefreshToken = (user: UserDbModel): string => {
 export const UserService = {
   loginUser,
   registerUser,
+  refreshAccessToken,
 };

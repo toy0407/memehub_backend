@@ -12,21 +12,18 @@ const commentDbSchema: Schema<CommentDbModel> = new Schema<CommentDbModel>(
   {
     _id: {
       type: Schema.Types.ObjectId,
-      required: true,
+      auto: true,
     },
     memeId: {
       type: Schema.Types.ObjectId,
       ref: "MemeDbModel",
-      required: true,
     },
     body: {
       type: String,
-      required: true,
     },
     author: {
       type: Schema.Types.ObjectId,
       ref: "UserDbModel",
-      required: true,
     },
     createdAt: {
       type: Date,

@@ -15,16 +15,14 @@ const memeDbSchema: Schema<MemeDbModel> = new Schema<MemeDbModel>(
   {
     _id: {
       type: Schema.Types.ObjectId,
-      required: true,
+      auto: true,
     },
     creator: {
       type: Schema.Types.ObjectId,
       ref: "UserDbModel",
-      required: true,
     },
     url: {
       type: String,
-      required: true,
     },
     audioUrl: {
       type: String,

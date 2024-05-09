@@ -12,18 +12,16 @@ const reactionGroupDbSchema: Schema<ReactionGroupDbModel> =
     {
       _id: {
         type: Schema.Types.ObjectId,
-        required: true,
+        auto: true,
       },
       memeId: {
         type: Schema.Types.ObjectId,
         ref: "MemeDbModel",
-        required: true,
       },
       reactions: [
         {
           type: Schema.Types.ObjectId,
           ref: "ReactionDbModel",
-          required: true,
         },
       ],
       createdAt: {

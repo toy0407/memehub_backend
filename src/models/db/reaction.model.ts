@@ -17,22 +17,19 @@ const reactionDbSchema: Schema<ReactionDbModel> = new Schema<ReactionDbModel>(
   {
     _id: {
       type: Schema.Types.ObjectId,
-      required: true,
+      auto: true,
     },
     memeId: {
       type: Schema.Types.ObjectId,
       ref: "MemeDbModel",
-      required: true,
     },
     reactionType: {
       type: String,
       enum: ["upvote", "downvote"],
-      required: true,
     },
     author: {
       type: Schema.Types.ObjectId,
       ref: "UserDbModel",
-      required: true,
     },
     createdAt: {
       type: Date,
