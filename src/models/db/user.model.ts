@@ -18,28 +18,23 @@ const userDbSchema: Schema<UserDbModel> = new Schema<UserDbModel>(
   {
     _id: {
       type: Schema.Types.ObjectId,
-      required: true,
+      auto: true,
     },
     userName: {
       type: String,
-      required: true,
       unique: true,
     },
     fullName: {
       type: String,
-      required: true,
     },
     age: {
       type: Number,
-      required: true,
     },
     email: {
       type: String,
-      required: true,
     },
     password: {
       type: String,
-      required: true,
     },
     phoneNumber: {
       type: String,
