@@ -25,5 +25,6 @@ export interface FindUserByUsernameRequestModel {
 }
 
 export interface UpdateUserRequestModel {
+  userId: string;
   update: Partial<UserDbModel>;
 }

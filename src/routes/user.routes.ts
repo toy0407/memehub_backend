@@ -8,6 +8,6 @@ UserRouter.post("/register", UserApi.registerUser)
   .post("/refresh-token", UserApi.refreshAccessToken)
   .post("/forgot-password", UserApi.forgotPassword)
   .get("/find/username/:userName", UserApi.findUserByUsername)
-  .patch("/update/:userId", UserApi.updateUser);
+  .patch("/update", UserApi.updateUser);
 
 export default UserRouter;

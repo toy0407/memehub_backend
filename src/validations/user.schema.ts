@@ -1,17 +1,5 @@
 import Joi from "joi";
 
-const userSchema = Joi.object({
-  _id: Joi.string().optional().allow(null),
-  userName: Joi.string().optional().allow(null),
-  email: Joi.string().email().optional().allow(null),
-  password: Joi.string().optional().allow(null),
-  fullName: Joi.string().optional().allow(null),
-  age: Joi.number().integer().optional().allow(null),
-  phoneNumber: Joi.string().optional().allow(null),
-  profileImageUrl: Joi.string().optional().allow(null),
-  // TODO: Add memeList, favoriteMemeList
-});
-
 const userRegisterValidationSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
@@ -36,7 +24,7 @@ const findUserByUsernameSchema = Joi.object({
 });
 
 const updateUserSchema = Joi.object({
-  // TODO: Test
+  userId: Joi.string().required(),
   update: Joi.object({
     fullName: Joi.string().optional().allow(null),
     age: Joi.number().integer().optional().allow(null),
@@ -48,7 +36,7 @@ const updateUserSchema = Joi.object({
 });
 
 export const UserValidations = {
-  userSchema,
+  // userSchema,
   userLoginValidationSchema,
   userRegisterValidationSchema,
   refreshTokenSchema,

@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi, { options } from "joi";
 
 interface ValidationResult<T> {
   value?: T;
@@ -8,18 +8,8 @@ interface ValidationResult<T> {
 const validate = <T>(
   input: any,
   schema: Joi.ObjectSchema
-): Promise<ValidationResult<T>> => {
-  return new Promise((resolve, reject) => {
-    const result = schema.validate(input, {
-      stripUnknown: true,
-    });
-    if (result.error) {
-      const error: Joi.ValidationError = result.error;
-      resolve({ error });
-    } else {
-      resolve({ value: result.value });
-    }
-  });
+): ValidationResult<T> => {
+  return schema.validate(input, { stripUnknown: true });
 };
 
 export const Validator = {

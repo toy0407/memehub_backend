@@ -12,12 +12,10 @@ import {
   UserLoginRequestModel,
   UserRegisterRequestModel,
 } from "../models/request/user.request";
-import { UserIdRequestModel } from "../models/request/id.request";
-import { IdValidations } from "../validations/id.schema";
 
 const loginUser = async (req: Request, res: Response) => {
   try {
-    const loginCredentials = await Validator.validate<UserLoginRequestModel>(
+    const loginCredentials = Validator.validate<UserLoginRequestModel>(
       req.body,
       UserValidations.userLoginValidationSchema
     );
@@ -48,7 +46,7 @@ const loginUser = async (req: Request, res: Response) => {
 const registerUser = async (req: Request, res: Response) => {
   try {
     const registrationCredentials =
-      await Validator.validate<UserRegisterRequestModel>(
+      Validator.validate<UserRegisterRequestModel>(
         req.body,
         UserValidations.userRegisterValidationSchema
       );
@@ -84,7 +82,7 @@ const registerUser = async (req: Request, res: Response) => {
 
 const refreshAccessToken = async (req: Request, res: Response) => {
   try {
-    const reqBody = await Validator.validate<RefreshTokenRequestModel>(
+    const reqBody = Validator.validate<RefreshTokenRequestModel>(
       req.body,
       UserValidations.refreshTokenSchema
     );
@@ -114,7 +112,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
 
 const forgotPassword = async (req: Request, res: Response) => {
   try {
-    const reqBody = await Validator.validate<ForgotPasswordRequestModel>(
+    const reqBody = Validator.validate<ForgotPasswordRequestModel>(
       req.body,
       UserValidations.forgotPasswordSchema
     );
@@ -146,7 +144,7 @@ const forgotPassword = async (req: Request, res: Response) => {
 
 const findUserByUsername = async (req: Request, res: Response) => {
   try {
-    const reqBody = await Validator.validate<FindUserByUsernameRequestModel>(
+    const reqBody = Validator.validate<FindUserByUsernameRequestModel>(
       req.params,
       UserValidations.findUserByUsernameSchema
     );
@@ -178,15 +176,7 @@ const findUserByUsername = async (req: Request, res: Response) => {
 
 const updateUser = async (req: Request, res: Response) => {
   try {
-    const reqParams = await Validator.validate<UserIdRequestModel>(
-      req.params,
-      IdValidations.userIdSchema
-    );
-    if (CommonUtils.isDefined(reqParams.error)) {
-      Logger.debug(`Update user error: ${reqParams.error}`);
-      return res.status(404).json({ message: reqParams.error!.toString() });
-    }
-    const reqBody = await Validator.validate<UpdateUserRequestModel>(
+    const reqBody = Validator.validate<UpdateUserRequestModel>(
       req.body,
       UserValidations.updateUserSchema
     );
@@ -195,7 +185,7 @@ const updateUser = async (req: Request, res: Response) => {
       return res.status(404).json({ message: reqBody.error!.toString() });
     }
     const updateUserResult = await UserService.updateUser(
-      reqParams.value!.userId,
+      reqBody.value!.userId,
       reqBody.value!.update
     );
     if (!updateUserResult.isSuccess) {
