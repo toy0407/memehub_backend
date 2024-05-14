@@ -67,6 +67,7 @@ const refreshAccessToken = async (
     refreshToken,
     process.env.JWT_REFRESH_TOKEN_SECRET!
   ) as { userId: string };
+  // TODO: Add a case to check if refresh token is expired
   const userId = decoded.userId;
   const user = await User.findById<UserDbModel>(userId);
   if (CommonUtils.isNullorUndefined(user)) {

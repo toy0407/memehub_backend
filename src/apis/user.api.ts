@@ -93,6 +93,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
     const refreshTokenResult = await UserService.refreshAccessToken(
       reqBody.value!.refreshToken
     );
+    // TODO: Add case when refresh token is expired
     if (!refreshTokenResult.isSuccess) {
       Logger.debug(`Refresh Token Error: ${refreshTokenResult.error}`);
       return res

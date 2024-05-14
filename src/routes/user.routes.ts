@@ -9,5 +9,7 @@ UserRouter.post("/register", UserApi.registerUser)
   .post("/forgot-password", UserApi.forgotPassword)
   .get("/find/username/:userName", UserApi.findUserByUsername)
   .patch("/update", UserApi.updateUser);
+// TODO: Add Google Signin
+// TODO: Add FB Signin
 
 export default UserRouter;
