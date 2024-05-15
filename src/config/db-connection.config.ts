@@ -3,6 +3,7 @@ import Logger from "../utils/logger.utils";
 
 const connectDB = async (): Promise<void> => {
   try {
+    Logger.info("Connecting to MongoDB");
     mongoose.set("strictQuery", false);
     await mongoose.connect(process.env.MONGODB_DATABASE_URI!);
   } catch (err) {

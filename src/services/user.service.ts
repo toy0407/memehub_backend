@@ -63,20 +63,20 @@ const registerUser = async (
 const refreshAccessToken = async (
   refreshToken: string
 ): Promise<GenericResponseModel<any>> => {
-  const decoded = jwt.verify(
-    refreshToken,
-    process.env.JWT_REFRESH_TOKEN_SECRET!
-  ) as { userId: string };
-  // TODO: Add a case to check if refresh token is expired
+  const decoded = jwt.decode(refreshToken) as { userId: string, exp: number };
+  if (decoded && decoded.exp * 1000 < Date.now()) {
+    return { isSuccess: false, error: "Refresh token expired" };
+  }
   const userId = decoded.userId;
   const user = await User.findById<UserDbModel>(userId);
   if (CommonUtils.isNullorUndefined(user)) {
     Logger.debug("User not found from provided token");
-    return { isSuccess: false, error: "User not found fron provided token" };
+    return { isSuccess: false, error: "User not found from provided token" };
   }
   const newAccessToken = _generateAccessToken(user!);
   return { isSuccess: true, data: { accessToken: newAccessToken } };
 };
+
 
 const forgotPassword = async (
   email: string

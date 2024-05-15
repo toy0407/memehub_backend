@@ -38,5 +38,6 @@ mongoose.connection.once("open", () => {
 });
 
 mongoose.connection.on("error", () => {
-  Logger.error(`Connection failed to MongoDB`);
+  Logger.error(`Connection failed to MongoDB. Retrying in 15 seconds`);
+  setTimeout(connectDB, 15*1000); // Retry connection every 15 seconds on error
 });
